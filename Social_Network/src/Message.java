@@ -16,7 +16,7 @@ public class Message {
 	}
 	/**
 	 * Mise à jour de la date du message
-	 * @param date : nouvelle date du message
+	 * @param date nouvelle date du message
 	 * @throws Exception si la date n'est pas valide
 	 */
 	public void setDate(Date date) {
@@ -32,7 +32,7 @@ public class Message {
 	}
 	/**
 	 * Mise à jour de l'id du message
-	 * @param idMessage : nouvelle identifiant du message
+	 * @param idMessage nouvelle identifiant du message
 	 * @throws Exception si le nouvelle identifiant du message existe dèjà (l'identifiant du message doit être unique)
 	 */
 	public void setIdMessage(int idMessage) {
@@ -48,7 +48,7 @@ public class Message {
 	}
 	/**
 	 * Mise à jour de l'id de l'utilisateur
-	 * @param idUser : nouvelle identifiant de l'utilisateur
+	 * @param idUser nouvelle identifiant de l'utilisateur
 	 * @throws Exception si le nouveau nom d'utilisateur existe dèjà (le nom d'utilisateur doit être unique)
 	 */
 	public void setIdUser(int idUser) {
@@ -64,7 +64,7 @@ public class Message {
 	}
 	/**
 	 * Mise à jour du contenu du message
-	 * @param message : nouveau contenu du message
+	 * @param message nouveau contenu du message
 	 */
 	public void setMessage(String message) {
 		this.message = message;
@@ -79,7 +79,7 @@ public class Message {
 	}
 	/**
 	 * Mise à jour du nom de l'utilisateur
-	 * @param user : nouveau nom de l'utilisateur
+	 * @param user nouveau nom de l'utilisateur
 	 */
 	public void setUser(String user) {
 		this.user = user;
