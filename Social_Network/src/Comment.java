@@ -18,7 +18,7 @@ public class Comment {
 	}
 	/**
 	 * Mise à jour de la date du commentaire
-	 * @param date : nouvelle date
+	 * @param date nouvelle date
 	 */
 	public void setDate(Date date) {
 		this.date = date;
@@ -33,7 +33,7 @@ public class Comment {
 	}
 	/**
 	 * Mise à jour de l'id du commentaire
-	 * @param idCommentaire : nouvelle identifiant de commentaire
+	 * @param idCommentaire nouvelle identifiant de commentaire
 	 * @throws Exception si le nouvelle identifiant du commentaire existe dèjà (l'identifiant du commentaire doit être unique)
 	 */
 	public void setIdCommentaire(int idCommentaire) {
@@ -49,7 +49,7 @@ public class Comment {
 	}
 	/**
 	 * Mise à jour de l'id utilisateur
-	 * @param idUser : nouvelle identifiant de l'utilisateur
+	 * @param idUser nouvelle identifiant de l'utilisateur
 	 * @throws Exception si le nouveau nom d'utilisateur existe dèjà (le nom d'utilisateur doit être unique)
 	 */
 	public void setIdUser(int idUser) {
@@ -65,7 +65,7 @@ public class Comment {
 	}
 	/**
 	 * Mise à jour du commentaire
-	 * @param comment : nouveau commentaire
+	 * @param comment nouveau commentaire
 	 */
 	public void setComment(String comment) {
 		this.comment = comment;
@@ -80,7 +80,7 @@ public class Comment {
 	}
 	/**
 	 * Mise à jour du nom de l'utilisateur
-	 * @param user : nouveau nom d'utilisateur
+	 * @param user nouveau nom d'utilisateur
 	 */
 	public void setUser(String user) {
 		this.user = user;
@@ -95,7 +95,7 @@ public class Comment {
 	}
 	/**
 	 * Mise à jour du pid du message
-	 * @param pidMessage : nouveau pid du message
+	 * @param pidMessage nouveau pid du message
 	 */
 	public void setPidMessage(int pidMessage) {
 		this.pidMessage = pidMessage;
@@ -110,7 +110,7 @@ public class Comment {
 	}
 	/**
 	 * Mise à jour du pid du commentaire
-	 * @param pidCommentaire : nouveau pid du commentaire
+	 * @param pidCommentaire nouveau pid du commentaire
 	 */
 	public void setPidCommentaire(int pidCommentaire) {
 		this.pidCommentaire = pidCommentaire;
