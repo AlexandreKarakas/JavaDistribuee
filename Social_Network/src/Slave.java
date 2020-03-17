@@ -2,7 +2,7 @@ import java.io.*;
 import java.net.Socket;
 import java.net.SocketException;
 
-public class Slave {
+public class Slave implements Runnable{
     private final Socket socket;
     public Slave(Socket accept) {
         this.socket = accept;

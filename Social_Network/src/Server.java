@@ -7,7 +7,8 @@ public class Server {
     private static int poolSize;
     private boolean isFinished;
     private ExecutorService pool;
-    private final ServerSocket serverSocket ;
+    private final ServerSocket serverSocket;
+
     public ExecutorService getPool() {
         return pool;
     }
@@ -54,9 +55,5 @@ public class Server {
         }catch(IOException ex) {
             pool.shutdown();
         }
-    }
-
-    public Server() {
-
     }
 }
