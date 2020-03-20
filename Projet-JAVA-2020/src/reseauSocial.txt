@@ -260,7 +260,7 @@
 706566|459|About Rob. About Wil. About Wei. About Ice. About Mar. About Afg. About Swi. About Sh.|Jharana Bajracharya Rashid Shrestha|706565|
 706254|459|About Plato, letters have been ascribe. About Cary Grant, an Honorary Oscar .|Jharana Bajracharya Rashid Shrestha||705149
 706262|459|I see|Jharana Bajracharya Rashid Shrestha|706254|
-706261|459|About Felix Mendelssohn, in English-speaking countries, as Felix Mendelssohn (3 February 1809 –.|Jharana Bajracharya Rashid Shrestha|706257|
+706261|459|About Felix Mendelssohn, in English-speaking countries, as Felix Mendelssohn (3 February 1809 –.|Jharana Bajracharya Rashid Shrestha|706257|
 706671|459|About Fri. About Dav. About Bey. About Muh. About Ada. About Naz. About Lin. .|Jharana Bajracharya Rashid Shrestha|706670|
 706678|459|good|Jharana Bajracharya Rashid Shrestha|706671|
 723282|2783||Rafael Alonso||
@@ -1687,7 +1687,7 @@
 725353|4555|duh|Wei Zhou||723183
 725359|4555|maybe|Wei Zhou||723183
 725357|1222|cool|Ali Brar|725350|
-1373277|1355|About Peter Gabriel, who rose to fame. About John A. Macdonald, 19 years as.|Peter Taylor||1373178
+1373277|1355|About Peter Gabriel, who rose to fame. About John A. Macdonald, 19 years as.|Peter Taylor||1373178
 1373289|1355|yes|Peter Taylor|1373277|
 1373285|1355|good|Peter Taylor|1373277|
 1172467|683|photo1172467.jpg|Marcelo Oliveira||
@@ -2149,7 +2149,7 @@
 1416944|3962|roflol|Sergio Gonzalez|1416942|
 312702|2023|thanks|Andreas Svensson|312698|
 1378905|1259|LOL|Mee Vongvichit|1378895|
-1340553|143|About Vatican City, of 1.2 billion Latin and Eastern Catholic adherents aro.|Maria Alkaios|1340552|
+1340553|143|About Vatican City, of 1.2 billion Latin and Eastern Catholic adherents aro.|Maria Alkaios|1340552|
 1302284|143|ok|Maria Alkaios||1301441
 312705|2023|About Preflyte, album also includes early demo versions of the songs Here Without You, You.|Andreas Svensson|312704|
 1302281|4644|cool|Alexei Pliuschin||1301441
@@ -2181,7 +2181,7 @@
 1340549|143|About Alice Cooper, decades. With a stage show that features guillotines, electric chairs.|Maria Alkaios|1340544|
 1340550|143|fine|Maria Alkaios|1340549|
 312709|4273|LOL|Jun Lu|312706|
-258079|2191|About Fidel Castro, of State and Council of Ministers. Following th. About John Ford, April 1586 – ca. 1639) was an English Jacobean a.|Jaime Rojas|258073|
+258079|2191|About Fidel Castro, of State and Council of Ministers. Following th. About John Ford, April 1586 – ca. 1639) was an English Jacobean a.|Jaime Rojas|258073|
 312707|2023|fine|Andreas Svensson|312699|
 1302282|1490|About Robbie Williams, was announced he had rejoined Take That and that the group inten.|John Wilson||1301441
 1302286|1490|good|John Wilson|1302282|
@@ -2209,7 +2209,7 @@
 571985|4644|ok|Alexei Pliuschin|571983|
 1340551|143|About More, More, More, instrumental break in More, More, More and used it as t.|Maria Alkaios|1340549|
 354081|4178|duh|Lei Yan||353850
-258081|2191|About John Ford, Jacobean and Caroline playwright and poet born in. About Muddy Waters, Morganfield (April 4, 1913 – April 30, 1983).|Jaime Rojas|258073|
+258081|2191|About John Ford, Jacobean and Caroline playwright and poet born in. About Muddy Waters, Morganfield (April 4, 1913 – April 30, 1983).|Jaime Rojas|258073|
 354093|4178|LOL|Lei Yan||353850
 354088|4178|cool|Lei Yan|354085|
 571980|4644|About Lleyton Hewitt, Glynn Hewitt (born. About One After 909, album Let It Be. T.|Alexei Pliuschin|571979|
@@ -2472,7 +2472,7 @@
 1379094|1259|About Wol. About Dmi. About Lou. About Kel. About Lut. About I H. About In ..|Mee Vongvichit|1379090|
 29787|4577|right|Hao Zhang|29784|
 1340767|2698|About Henri Matisse, and his fluid and. About Leonardo da Vinci, sculptor, a.|Alexander Efimkin||1339418
-705519|3705|About Malta, (207 mi) north of Libya, with Gibraltar 1,755 km (1,091 mi) to the west an..|Bingjian Zhang||705071
+705519|3705|About Malta, (207 mi) north of Libya, with Gibraltar 1,755 km (1,091 mi) to the west an..|Bingjian Zhang||705071
 705520|1355|About Eleanor Roosevelt, (ERC or, less frequently, Roosevelt) is one of the six .|Peter Taylor|705519|
 705521|459|About Eleanor Roosevelt, San Diego. The col. About South African Republic, the Union o.|Jharana Bajracharya Rashid Shrestha|705520|
 705526|4005|ok|Zheng Zhang|705521|
