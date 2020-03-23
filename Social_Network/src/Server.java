@@ -65,27 +65,28 @@ public class Server {
 
         String line = lines.get(0);
         String[] r = line.split("\\|", -1);
-        String idMessage, message, pidMessage, idUser, user, idCommentaire, commentaire, pidCommentaire;
+        Message M = null; // Classe Message
+        Comment C = null; // Classe Commentaire
 
         if(r[4] == "" && r[5] == ""){
-            idMessage = r[0];
-            idUser = r[1];
-            message = r[2];
-            user = r[3];
+            M.setIdMessage(Integer.parseInt(r[0]));
+            M.setIdUser(Integer.parseInt(r[1]));
+            M.setMessage(r[2]);
+            M.setUser(r[3]);
         }
         else if(r[5] == ""){
-            idCommentaire = r[0];
-            idUser = r[1];
-            commentaire = r[2];
-            user = r[3];
-            pidCommentaire = r[4];
+            C.setIdCommentaire(Integer.parseInt(r[0]));
+            C.setIdUser(Integer.parseInt(r[1]));
+            C.setComment(r[2]);
+            C.setUser(r[3]);
+            C.setPidCommentaire(Integer.parseInt(r[4]));
         }
         else if(r[4] == ""){
-            idCommentaire = r[0];
-            idUser = r[1];
-            commentaire = r[2];
-            user = r[3];
-            pidMessage = r[5];
+            C.setIdCommentaire(Integer.parseInt(r[0]));
+            C.setIdUser(Integer.parseInt(r[1]));
+            C.setComment(r[2]);
+            C.setUser(r[3]);
+            C.setPidCommentaire(Integer.parseInt(r[5]));
         }
     }
 
