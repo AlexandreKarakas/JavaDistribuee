@@ -1,6 +1,8 @@
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
@@ -18,10 +20,26 @@ public class RunImpl implements Runnable {
             e.printStackTrace();
         }
 
+        // On crée une liste pouvant contenir au maximum 3 messages
+        List<LineOfFile> three_best_messages = new ArrayList<>(3);
+
         // On lit chaque ligne du fichier toutes les 1 à 3s et on réalise les opérations nécessaires
         for(String line : lines){
             wait_random_time(1000,3000);
             String[] r = line.split("\\|", -1);
+            LineOfFile msg = getLineType(r);
+
+            int score = msg.getScore();
+
+            if(three_best_messages.size() < 3)
+                three_best_messages.add(msg);
+            else if(score > three_best_messages.get(0).getScore())
+                three_best_messages.set(0, msg);
+            three_best_messages.sort(Comparator.comparingInt(LineOfFile::getScore));
+            // DEBUG //
+            for(LineOfFile l : three_best_messages){
+                l.printMsg();
+            }
 
         }
     }
@@ -35,8 +53,8 @@ public class RunImpl implements Runnable {
         }
     }
 
-    public void getLineType(String[] line){
-        // Throws error si pas line.length != 6
+    public LineOfFile getLineType(String[] line){
+        // Throws error if line.length != 6
 
         if(line[4].equals("") && line[5].equals("")){
             int idMessage = Integer.parseInt(line[0]),
@@ -44,7 +62,7 @@ public class RunImpl implements Runnable {
             String message = line[2],
                     user = line[3];
 
-            new Message(idMessage, idUser, message, user);
+            return new Message(idMessage, idUser, message, user);
         }
 
         else if(line[5].equals("")){
@@ -54,18 +72,20 @@ public class RunImpl implements Runnable {
             String comment = line[2],
                     user = line[3];
 
-            new Comment(idComment, idUser, comment, user, pidComment, true);
+            return new Comment(idComment, idUser, comment, user, pidComment, true);
+
         }
 
-        else if(line[4].equals("")){
+        else {
             int idComment = Integer.parseInt(line[0]),
                     idUser = Integer.parseInt(line[1]),
                     pidMessage = Integer.parseInt(line[5]);
             String comment = line[2],
                     user = line[3];
 
-            new Comment(idComment, idUser, comment, user, pidMessage, false);
+            return new Comment(idComment, idUser, comment, user, pidMessage, false);
         }
+
     }
 
     public void updateScores(){

@@ -1,6 +1,6 @@
 import java.util.Date;
 
-public class Comment {
+public class Comment implements LineOfFile {
     private Date date;
 
     private int idComment,
@@ -36,6 +36,35 @@ public class Comment {
         score = 20;
     }
 
+
+    public int getScore() {
+        return score;
+    }
+
+    public void addToScore(int value) {
+        score += value;
+    }
+
+    public void decreaseScoreByOne() {
+        score--;
+    }
+
+
+    public void printMsg() {
+        int pidParent;
+        if(pidComment == -1)
+            pidParent = pidMessage;
+        else
+            pidParent = pidComment;
+        System.out.println("-----------------");
+        System.out.println("ID Comment : " + idComment);
+        System.out.println("ID User : " + idUser);
+        System.out.println("Comment : " + comment);
+        System.out.println("User : " + user);
+        System.out.println("PID Parent : " + pidParent);
+        System.out.println("Score : " + score);
+        System.out.println("-----------------");
+    }
 
 
     /**

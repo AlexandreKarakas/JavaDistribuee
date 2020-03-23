@@ -1,6 +1,6 @@
 import java.util.Date;
 
-public class Message {
+public class Message implements LineOfFile {
     private Date date;
 
     private int idMessage,
@@ -17,6 +17,29 @@ public class Message {
         this.message = message;
         this.user = user;
         score = 20;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void addToScore(int value) {
+        score += value;
+    }
+
+    public void decreaseScoreByOne() {
+        score--;
+    }
+
+
+    public void printMsg() {
+        System.out.println("-----------------");
+        System.out.println("ID Message : " + idMessage);
+        System.out.println("ID User : " + idUser);
+        System.out.println("Message : " + message);
+        System.out.println("User : " + user);
+        System.out.println("Score : " + score);
+        System.out.println("-----------------");
     }
 
 
