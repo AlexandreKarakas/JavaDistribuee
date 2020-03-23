@@ -1,13 +1,23 @@
 import java.util.Date;
 
 public class Message {
-    private static Date date;
+    private Date date;
 
-    private static Integer  idMessage,
-                            idUser;
+    private int idMessage,
+                idUser,
+                score;
 
-    private static String   message,
-                            user;
+    private String  message,
+                    user;
+
+
+    public Message(int idMessage, int idUser, String message, String user){
+        this.idMessage = idMessage;
+        this.idUser = idUser;
+        this.message = message;
+        this.user = user;
+        score = 20;
+    }
 
 
     /**
@@ -35,8 +45,8 @@ public class Message {
     }
     /**
      * Mise à jour de l'id du message
-     * @param idMessage nouvelle identifiant du message
-     * @throws Exception si le nouvelle identifiant du message existe dèjà (l'identifiant du message doit être unique)
+     * @param idMessage nouvel identifiant du message
+     * @throws Exception si le nouvel identifiant du message existe dèjà (l'identifiant du message doit être unique)
      */
     public void setIdMessage(int idMessage) {
         this.idMessage = idMessage;
@@ -51,7 +61,7 @@ public class Message {
     }
     /**
      * Mise à jour de l'id de l'utilisateur
-     * @param idUser nouvelle identifiant de l'utilisateur
+     * @param idUser nouvel identifiant de l'utilisateur
      * @throws Exception si le nouveau nom d'utilisateur existe dèjà (le nom d'utilisateur doit être unique)
      */
     public void setIdUser(int idUser) {
@@ -59,7 +69,7 @@ public class Message {
     }
 
     /**
-     * Renvoie le contenue du message
+     * Renvoie le contenu du message
      * @return String correspondant au contenu du message
      */
     public String getMessage() {

@@ -1,15 +1,40 @@
 import java.util.Date;
 
 public class Comment {
-    private static Date date;
+    private Date date;
 
-    private static Integer  idCommentaire,
-                            idUser,
-                            pidCommentaire,
-                            pidMessage;
+    private int idComment,
+                idUser,
+                pidComment,
+                pidMessage,
+                score;
 
-    private static String   comment,
-                            user;
+    private String  comment,
+                    user;
+
+    /**
+     * Crée un objet "Comment" : il s'agit d'un commentaire répondant soit à un autre commentaire,
+     * soit à un message
+     * @param idComment
+     * @param idUser
+     * @param comment
+     * @param user
+     * @param pidParent
+     */
+    public Comment(int idComment, int idUser, String comment, String user, int pidParent, boolean is_a_comment_to_another_comment){
+        if(is_a_comment_to_another_comment){
+            pidMessage = -1;
+            pidComment = pidParent;
+        } else {
+            pidComment = -1;
+            pidMessage = pidParent;
+        }
+        this.idComment = idComment;
+        this.idUser = idUser;
+        this.comment = comment;
+        this.user = user;
+        score = 20;
+    }
 
 
 
@@ -32,16 +57,16 @@ public class Comment {
      * Renvoie l'id du commentaire
      * @return int correspondant à l'idCommentaire
      */
-    public int getIdCommentaire() {
-        return idCommentaire;
+    public int getIdComment() {
+        return idComment;
     }
     /**
      * Mise à jour de l'id du commentaire
-     * @param idCommentaire nouvelle identifiant de commentaire
-     * @throws Exception si le nouvelle identifiant du commentaire existe dèjà (l'identifiant du commentaire doit être unique)
+     * @param idComment nouvel identifiant de commentaire
+     * @throws Exception si le nouvel identifiant du commentaire existe dèjà (l'identifiant du commentaire doit être unique)
      */
-    public void setIdCommentaire(int idCommentaire) {
-        this.idCommentaire = idCommentaire;
+    public void setIdComment(int idComment) {
+        this.idComment = idComment;
     }
 
     /**
@@ -109,14 +134,14 @@ public class Comment {
      * Renvoie le pid du commentaire
      * @return int correspondant au pid du commentaire
      */
-    public int getPidCommentaire() {
-        return pidCommentaire;
+    public int getPidComment() {
+        return pidComment;
     }
     /**
      * Mise à jour du pid du commentaire
-     * @param pidCommentaire nouveau pid du commentaire
+     * @param pidComment nouveau pid du commentaire
      */
-    public void setPidCommentaire(int pidCommentaire) {
-        this.pidCommentaire = pidCommentaire;
+    public void setPidComment(int pidComment) {
+        this.pidComment = pidComment;
     }
 }
