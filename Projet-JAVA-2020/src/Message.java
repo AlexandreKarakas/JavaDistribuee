@@ -31,15 +31,21 @@ public class Message implements LineOfFile {
         score--;
     }
 
+    public boolean isActive(){
+        return score > 0;
+    }
+
+    public int getId(){
+        return idMessage;
+    }
+
 
     public void printMsg() {
-        System.out.println("-----------------");
-        System.out.println("ID Message : " + idMessage);
-        System.out.println("ID User : " + idUser);
-        System.out.println("Message : " + message);
-        System.out.println("User : " + user);
-        System.out.println("Score : " + score);
-        System.out.println("-----------------");
+        System.out.print("ID Message : " + idMessage);
+        //System.out.println("ID User : " + idUser);
+        //System.out.println("Message : " + message);
+        //System.out.println("User : " + user);
+        System.out.println(" | Score : " + score);
     }
 
 

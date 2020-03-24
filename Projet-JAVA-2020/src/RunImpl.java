@@ -1,15 +1,13 @@
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class RunImpl implements Runnable {
     List<String> lines; // Liste de chaque ligne du fichier reseauSocial.txt
-    Map<Integer, String[]> line_map;
+    Map<Integer, LineOfFile> line_map;
+    List<LineOfFile> three_best_messages;
 
     @Override
     public void run() {
@@ -20,27 +18,65 @@ public class RunImpl implements Runnable {
             e.printStackTrace();
         }
 
-        // On crée une liste pouvant contenir au maximum 3 messages
-        List<LineOfFile> three_best_messages = new ArrayList<>(3);
+        // On crée une map contenant la liste des lignes du fichiers, identifiées par leur ID (Integer)
+        line_map = new HashMap<>();
+        // On crée une liste pouvant contenir au maximum 3 messages (ceux avec le score le plus élevé)
+        three_best_messages = new ArrayList<>(3);
 
         // On lit chaque ligne du fichier toutes les 1 à 3s et on réalise les opérations nécessaires
         for(String line : lines){
             wait_random_time(1000,3000);
             String[] r = line.split("\\|", -1);
-            LineOfFile msg = getLineType(r);
+            LineOfFile msg = createMsg(r);
 
-            int score = msg.getScore();
+            // On met le message dans la table de hachage, identifié par son ID
+            line_map.put(msg.getId(), msg);
 
+            // On insère le message dans l'ArrayList des 3 meilleurs messages si son score est suffisant
             if(three_best_messages.size() < 3)
                 three_best_messages.add(msg);
-            else if(score > three_best_messages.get(0).getScore())
+            else if(msg.getScore() > three_best_messages.get(0).getScore())
                 three_best_messages.set(0, msg);
-            three_best_messages.sort(Comparator.comparingInt(LineOfFile::getScore));
-            // DEBUG //
-            for(LineOfFile l : three_best_messages){
-                l.printMsg();
-            }
 
+            // On trie ensuite le tableau dans l'ordre croissant pour récupérer le score min. plus facilement plus tard
+            three_best_messages.sort(Comparator.comparingInt(LineOfFile::getScore));
+
+            // On met à jour le score du message parent si la ligne lue était un commentaire
+            if(msg instanceof Comment)
+                updateScoreParent((Comment) msg);
+
+            System.out.println("-----------------");
+            for(LineOfFile l : three_best_messages)
+                l.printMsg();
+
+
+        }
+    }
+
+    public void updateScoreParent(Comment msg){
+        // On récupère le message parent
+        int pidParent = msg.getPidParent();
+        LineOfFile msgParent = line_map.get(pidParent);
+
+        // S'il était déjà présent dans le tableau des 3 meilleurs messages, on met à jour son score et on retrie
+        if(three_best_messages.contains(msgParent)){
+            three_best_messages.indexOf(msgParent);
+            msgParent.addToScore(msg.getScore());
+            line_map.replace(pidParent, msgParent);
+            three_best_messages.sort(Comparator.comparingInt(LineOfFile::getScore));
+        }
+
+        else{
+            // On met à jour le score du message parent
+            msgParent.addToScore(msg.getScore());
+            line_map.replace(pidParent, msgParent);
+
+            // On vérifie si son score lui permet de rentrer dans le tableau des 3 meilleurs messages
+            // Puis on retrie le tableau selon le score
+            if(msgParent.getScore() > three_best_messages.get(0).getScore()){
+                three_best_messages.set(0, msgParent);
+                three_best_messages.sort(Comparator.comparingInt(LineOfFile::getScore));
+            }
         }
     }
 
@@ -53,7 +89,7 @@ public class RunImpl implements Runnable {
         }
     }
 
-    public LineOfFile getLineType(String[] line){
+    public LineOfFile createMsg(String[] line){
         // Throws error if line.length != 6
 
         if(line[4].equals("") && line[5].equals("")){
@@ -85,10 +121,6 @@ public class RunImpl implements Runnable {
 
             return new Comment(idComment, idUser, comment, user, pidMessage, false);
         }
-
-    }
-
-    public void updateScores(){
 
     }
 }
