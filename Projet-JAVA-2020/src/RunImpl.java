@@ -9,6 +9,11 @@ public class RunImpl implements Runnable {
     Map<Integer, LineOfFile> line_map;
     List<LineOfFile> three_best_messages;
     Timer timer = new Timer();
+    private final Socket socket;
+
+    public RunImpl(Socket accept){
+        this.socket = accept;
+    }
 
     @Override
     public void run() {
