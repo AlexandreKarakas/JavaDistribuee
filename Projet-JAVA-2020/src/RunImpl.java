@@ -8,6 +8,7 @@ public class RunImpl implements Runnable {
     List<String> lines; // Liste de chaque ligne du fichier reseauSocial.txt
     Map<Integer, LineOfFile> line_map;
     List<LineOfFile> three_best_messages;
+    Timer timer = new Timer();
 
     @Override
     public void run() {
@@ -31,19 +32,27 @@ public class RunImpl implements Runnable {
 
             // On met le message dans la table de hachage, identifié par son ID
             line_map.put(msg.getId(), msg);
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    LineOfFile temp = line_map.get(msg.getId());
+                    temp.decreaseScoreByOne();
+                    line_map.replace(msg.getId(), temp);
+                }
+            }, 30000, 30000);
 
             // On insère le message dans l'ArrayList des 3 meilleurs messages si son score est suffisant
             if(three_best_messages.size() < 3)
-                three_best_messages.add(msg);
-            else if(msg.getScore() > three_best_messages.get(0).getScore())
-                three_best_messages.set(0, msg);
+                three_best_messages.add(line_map.get(msg.getId()));
+            else if(line_map.get(msg.getId()).getScore() > three_best_messages.get(0).getScore())
+                three_best_messages.set(0, line_map.get(msg.getId()));
 
             // On trie ensuite le tableau dans l'ordre croissant pour récupérer le score min. plus facilement plus tard
             three_best_messages.sort(Comparator.comparingInt(LineOfFile::getScore));
 
             // On met à jour le score du message parent si la ligne lue était un commentaire
-            if(msg instanceof Comment)
-                updateScoreParent((Comment) msg);
+            if(line_map.get(msg.getId()) instanceof Comment)
+                updateScoreParent((Comment) line_map.get(msg.getId()));
 
             System.out.println("-----------------");
             for(LineOfFile l : three_best_messages)
