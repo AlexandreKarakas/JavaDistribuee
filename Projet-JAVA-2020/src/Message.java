@@ -1,11 +1,12 @@
 import java.util.Date;
 
-public class Message implements LineOfFile {
+public class Message implements FileData {
     private Date date;
 
     private int idMessage,
                 idUser,
-                score;
+                score,
+                valueOfImportance;
 
     private String  message,
                     user;
@@ -17,14 +18,15 @@ public class Message implements LineOfFile {
         this.message = message;
         this.user = user;
         score = 20;
+        valueOfImportance = score;
     }
 
     public int getScore() {
         return score;
     }
 
-    public void addToScore(int value) {
-        score += value;
+    public void addToValueOfImportance(int value) {
+        valueOfImportance += value;
     }
 
     public void decreaseScoreByOne() {
@@ -32,7 +34,7 @@ public class Message implements LineOfFile {
     }
 
     public boolean isActive(){
-        return score > 0;
+        return valueOfImportance > 0;
     }
 
     public int getId(){
@@ -45,7 +47,8 @@ public class Message implements LineOfFile {
         //System.out.println("ID User : " + idUser);
         //System.out.println("Message : " + message);
         //System.out.println("User : " + user);
-        System.out.println(" | Score : " + score);
+        System.out.print(" | Score : " + score);
+        System.out.println(" | Value of imp. : " + valueOfImportance);
     }
 
 
@@ -125,5 +128,13 @@ public class Message implements LineOfFile {
      */
     public void setUser(String user) {
         this.user = user;
+    }
+
+    public int getValueOfImportance() {
+        return valueOfImportance;
+    }
+
+    public void setValueOfImportance(int valueOfImportance){
+        this.valueOfImportance = valueOfImportance;
     }
 }

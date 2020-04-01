@@ -1,6 +1,6 @@
 import java.util.Date;
 
-public class Comment implements LineOfFile {
+public class Comment implements FileData {
     private Date date;
 
     private int idComment,
@@ -11,6 +11,8 @@ public class Comment implements LineOfFile {
 
     private String  comment,
                     user;
+
+    private boolean is_a_comment_to_another_comment;
 
     /**
      * Crée un objet "Comment" : il s'agit d'un commentaire répondant soit à un autre commentaire,
@@ -33,6 +35,7 @@ public class Comment implements LineOfFile {
         this.idUser = idUser;
         this.comment = comment;
         this.user = user;
+        this.is_a_comment_to_another_comment = is_a_comment_to_another_comment;
         score = 20;
     }
 
@@ -45,36 +48,18 @@ public class Comment implements LineOfFile {
         return pidComment==-1?pidMessage:pidComment;
     }
 
-    public void addToScore(int value) {
-        score += value;
-    }
-
     public void decreaseScoreByOne() {
-        score--;
-    }
-
-    public boolean isActive(){
-        return score > 0;
+        if(score > 0)
+            score--;
     }
 
     public int getId(){
         return idComment;
     }
 
+    /*public Message getRootMessage(TreeNode<FileData> thread){
 
-    public void printMsg() {
-        int pidParent;
-        if(pidComment == -1)
-            pidParent = pidMessage;
-        else
-            pidParent = pidComment;
-        System.out.print("ID Comment : " + idComment);
-        //System.out.println("ID User : " + idUser);
-        //System.out.println("Comment : " + comment);
-        //System.out.println("User : " + user);
-        System.out.print(" | PID Parent : " + pidParent);
-        System.out.println(" | Score : " + score);
-    }
+    }*/
 
 
     /**
@@ -182,5 +167,9 @@ public class Comment implements LineOfFile {
      */
     public void setPidComment(int pidComment) {
         this.pidComment = pidComment;
+    }
+
+    public boolean is_a_comment_to_another_comment() {
+        return is_a_comment_to_another_comment;
     }
 }

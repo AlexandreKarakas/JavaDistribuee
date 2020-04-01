@@ -3,90 +3,148 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Stream;
 
 public class RunImpl implements Runnable {
-    List<String> lines; // Liste de chaque ligne du fichier reseauSocial.txt
-    Map<Integer, LineOfFile> line_map;
-    List<LineOfFile> three_best_messages;
-    Timer timer = new Timer();
+    private Map<Integer, GenericTree<FileData>> map_threads_of_discussion;
+    private List<Message> messageList;
+    private Timer timer = new Timer();
 
-    @Override
-    public void run() {
-        // Lecture unique de toutes les lignes du fichier reseauSocial.txt
-        try {
-            lines = Files.readAllLines(Paths.get("./src/reseauSocial.txt"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void computeValueOfImportance(GenericTreeNode<FileData> root){
+        if(((Message) root.getData()).isActive()){
+            int value_of_importance = root.getData().getScore();
 
-        // On crée une map contenant la liste des lignes du fichiers, identifiées par leur ID (Integer)
-        line_map = new HashMap<>();
-        // On crée une liste pouvant contenir au maximum 3 messages (ceux avec le score le plus élevé)
-        three_best_messages = new ArrayList<>(3);
+            for(GenericTreeNode<FileData> node : root.getChildren()){
+                value_of_importance += node.getData().getScore();
+            }
 
-        // On lit chaque ligne du fichier toutes les 1 à 3s et on réalise les opérations nécessaires
-        for(String line : lines){
-            wait_random_time(1000,3000);
-            String[] r = line.split("\\|", -1);
-            LineOfFile msg = createMsg(r);
-
-            // On met le message dans la table de hachage, identifié par son ID
-            line_map.put(msg.getId(), msg);
-            timer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    LineOfFile temp = line_map.get(msg.getId());
-                    temp.decreaseScoreByOne();
-                    line_map.replace(msg.getId(), temp);
-                }
-            }, 30000, 30000);
-
-            // On insère le message dans l'ArrayList des 3 meilleurs messages si son score est suffisant
-            if(three_best_messages.size() < 3)
-                three_best_messages.add(line_map.get(msg.getId()));
-            else if(line_map.get(msg.getId()).getScore() > three_best_messages.get(0).getScore())
-                three_best_messages.set(0, line_map.get(msg.getId()));
-
-            // On trie ensuite le tableau dans l'ordre croissant pour récupérer le score min. plus facilement plus tard
-            three_best_messages.sort(Comparator.comparingInt(LineOfFile::getScore));
-
-            // On met à jour le score du message parent si la ligne lue était un commentaire
-            if(line_map.get(msg.getId()) instanceof Comment)
-                updateScoreParent((Comment) line_map.get(msg.getId()));
-
-            System.out.println("-----------------");
-            for(LineOfFile l : three_best_messages)
-                l.printMsg();
-
-
+            ((Message) root.getData()).setValueOfImportance(value_of_importance);
         }
     }
 
-    public void updateScoreParent(Comment msg){
-        // On récupère le message parent
-        int pidParent = msg.getPidParent();
-        LineOfFile msgParent = line_map.get(pidParent);
+    private void scheduleScoreDecrease(GenericTreeNode<FileData> node, GenericTree<FileData> tree, int time){
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                node.getData().decreaseScoreByOne();
+                // On n'oublie pas de recalculer la VOI du thread
+                computeValueOfImportance(tree.getRoot());
+            }
+        }, time, time);
+    }
 
-        // S'il était déjà présent dans le tableau des 3 meilleurs messages, on met à jour son score et on retrie
-        if(three_best_messages.contains(msgParent)){
-            three_best_messages.indexOf(msgParent);
-            msgParent.addToScore(msg.getScore());
-            line_map.replace(pidParent, msgParent);
-            three_best_messages.sort(Comparator.comparingInt(LineOfFile::getScore));
+    private void doAllTheWork(String strData){
+        // On patiente 1-3s avant de réaliser les opérations
+        wait_random_time(1000,3000);
+
+        // On délimite la ligne lue afin de séparer les différentes valeurs pour les stocker dans un tableau
+        String[] r = strData.split("\\|", -1);
+        // On crée ensuite une variable de type FileData, qui peut désigner soit un commentaire, soit un message
+        FileData data = createData(r);
+
+        // On crée un noeud contenant le message/commentaire lu
+        GenericTreeNode<FileData> node = new GenericTreeNode<>(data);
+
+        // Si la ligne lue est un message, on exécute les opérations suivantes
+        if(data instanceof Message){
+            // On crée un nouveau thread de discussion (TdD), dont la racine sera le message lu
+            GenericTree<FileData> thread_of_discussion = new GenericTree<>();
+            thread_of_discussion.setRoot(node);
+
+            // On programme la diminution du score du message de 1 toutes les 30 secondes
+            // Et on met à jour la Value of Importance du thread
+            scheduleScoreDecrease(node, thread_of_discussion, 30000);
+
+            // On ajoute ensuite ce TdD à la map de tous les TdD
+            map_threads_of_discussion.put(data.getId(), thread_of_discussion);
+
+            // Et enfin on ajoute le message à liste des messages
+            messageList.add((Message) data);
         }
 
+        // Sinon (donc si la ligne lue est un commentaire), on exécute les opérations suivantes
         else{
-            // On met à jour le score du message parent
-            msgParent.addToScore(msg.getScore());
-            line_map.replace(pidParent, msgParent);
 
-            // On vérifie si son score lui permet de rentrer dans le tableau des 3 meilleurs messages
-            // Puis on retrie le tableau selon le score
-            if(msgParent.getScore() > three_best_messages.get(0).getScore()){
-                three_best_messages.set(0, msgParent);
-                three_best_messages.sort(Comparator.comparingInt(LineOfFile::getScore));
+            // Si le commentaire répond à un autre commentaire, on cherche dans quel thread ce dernier se situe
+            // dans le but de récupérer le message racine du thread pour modifier la value of importance
+            if(((Comment) data).is_a_comment_to_another_comment()){
+                GenericTree<FileData> thread_of_discussion = findThread(((Comment) data).getPidComment());
+                GenericTreeNode<FileData> root = thread_of_discussion.getRoot();
+
+                // On ajoute le nouveau noeud enfant à notre arbre
+                root.addChild(node);
+                thread_of_discussion.setRoot(root);
+
+                // On programme la diminution du score du commentaire de 1 toutes les 30 secondes
+                // Et on met à jour la Value of Importance du thread
+                scheduleScoreDecrease(node, thread_of_discussion, 30000);
+
+                // On calcule le nouveau score du message racine
+                computeValueOfImportance(thread_of_discussion.getRoot());
+            }
+
+            // Si le commentaire répond à un message, on récupère le noeud racine et on met à jour la value of importance
+            else{
+                // On récupère le thread de discussion (TdD) dont l'ID de la racine correspond au PID du message auquel le commentaire répond
+                GenericTree<FileData> thread_of_discussion = map_threads_of_discussion.get(((Comment) data).getPidMessage());
+                GenericTreeNode<FileData> root = thread_of_discussion.getRoot();
+
+                // On ajoute le nouveau noeud enfant à notre arbre
+                root.addChild(node);
+                thread_of_discussion.setRoot(root);
+
+                // On programme la diminution du score du commentaire de 1 toutes les 30 secondes
+                // Et on met à jour la Value of Importance du thread
+                scheduleScoreDecrease(node, thread_of_discussion, 30000);
+
+                // On calcule le nouveau score du message racine
+                computeValueOfImportance(thread_of_discussion.getRoot());
             }
         }
+
+
+
+        // DEBUG
+        System.out.println("-----------------");
+        for(Message m : getThreeBestMessages()){
+            m.printMsg();
+        }
+    }
+
+    public GenericTree<FileData> findThread(int idComment){
+        for(Map.Entry<Integer, GenericTree<FileData>> thread : map_threads_of_discussion.entrySet()){
+            GenericTree<FileData> curr = thread.getValue();
+            if(curr.find(idComment) != null)
+                return curr;
+        }
+        return null;
+    }
+
+    @Override
+    public void run() {
+        // On crée une map contenant la liste de tous les threads de discussion, identifiés par l'ID du message racine
+        map_threads_of_discussion = new HashMap<>();
+        // On crée une liste contenant les messages
+        messageList = new ArrayList<>();
+
+        // On lit chaque ligne du fichier reseauSocial.txt, et on exécute la methode doAllTheWork pour chacune d'entre elles
+        try(Stream<String> stream = Files.lines(Paths.get("./src/reseauSocial.txt"))){
+            stream.forEach(this::doAllTheWork);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public List<Message> getThreeBestMessages(){
+        // On trie la liste des messages dans l'ordre décroissant des scores pour récupérer les 3 meilleurs messages
+        messageList.sort(Comparator.comparingInt(Message::getValueOfImportance).reversed());
+
+        List<Message> three_best_messages = new ArrayList<>(3);
+
+        if(messageList.size() <= 3) three_best_messages.addAll(messageList);
+        else for (int i = 0; i < 3; i++) three_best_messages.add(messageList.get(i));
+
+        return three_best_messages;
     }
 
     public void wait_random_time(int origin, int bound){
@@ -98,7 +156,7 @@ public class RunImpl implements Runnable {
         }
     }
 
-    public LineOfFile createMsg(String[] line){
+    public FileData createData(String[] line){
         // Throws error if line.length != 6
 
         if(line[4].equals("") && line[5].equals("")){
