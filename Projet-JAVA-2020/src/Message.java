@@ -1,5 +1,7 @@
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Date;
 
+@XmlRootElement
 public class Message implements FileData {
     private Date date;
 
@@ -21,14 +23,6 @@ public class Message implements FileData {
         valueOfImportance = score;
     }
 
-    public int getScore() {
-        return score;
-    }
-
-    public void addToValueOfImportance(int value) {
-        valueOfImportance += value;
-    }
-
     public void decreaseScoreByOne() {
         score--;
     }
@@ -37,51 +31,12 @@ public class Message implements FileData {
         return valueOfImportance > 0;
     }
 
-    public int getId(){
-        return idMessage;
-    }
-
-
-    public void printMsg() {
-        System.out.print("ID Message : " + idMessage);
-        //System.out.println("ID User : " + idUser);
-        //System.out.println("Message : " + message);
-        //System.out.println("User : " + user);
-        System.out.print(" | Score : " + score);
-        System.out.println(" | Value of imp. : " + valueOfImportance);
-    }
-
-
-    /**
-     * Renvoie la date du message
-     * @return Date correspondant à la date du message
-     */
-    public Date getDate() {
-        return date;
-    }
-    /**
-     * Mise à jour de la date du message
-     * @param date nouvelle date du message
-     * @throws Exception si la date n'est pas valide
-     */
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
     /**
      * Renvoie l'id du message
      * @return int correspondant à l'identifiant du message
      */
-    public int getIdMessage() {
+    public int getId(){
         return idMessage;
-    }
-    /**
-     * Mise à jour de l'id du message
-     * @param idMessage nouvel identifiant du message
-     * @throws Exception si le nouvel identifiant du message existe dèjà (l'identifiant du message doit être unique)
-     */
-    public void setIdMessage(int idMessage) {
-        this.idMessage = idMessage;
     }
 
     /**
@@ -91,43 +46,9 @@ public class Message implements FileData {
     public int getIdUser() {
         return idUser;
     }
-    /**
-     * Mise à jour de l'id de l'utilisateur
-     * @param idUser nouvel identifiant de l'utilisateur
-     * @throws Exception si le nouveau nom d'utilisateur existe dèjà (le nom d'utilisateur doit être unique)
-     */
-    public void setIdUser(int idUser) {
-        this.idUser = idUser;
-    }
 
-    /**
-     * Renvoie le contenu du message
-     * @return String correspondant au contenu du message
-     */
-    public String getMessage() {
-        return message;
-    }
-    /**
-     * Mise à jour du contenu du message
-     * @param message nouveau contenu du message
-     */
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    /**
-     * Renvoie le nom de l'utilisateur
-     * @return String correspondant au nom de l'utilisateur
-     */
-    public String getUser() {
-        return user;
-    }
-    /**
-     * Mise à jour du nom de l'utilisateur
-     * @param user nouveau nom de l'utilisateur
-     */
-    public void setUser(String user) {
-        this.user = user;
+    public int getScore() {
+        return score;
     }
 
     public int getValueOfImportance() {

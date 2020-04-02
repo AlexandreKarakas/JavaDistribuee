@@ -1,15 +1,19 @@
 import java.io.IOException;
-import java.net.Socket;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.rmi.RemoteException;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Stream;
 
-public class RunImpl implements Runnable {
+public class RunImpl extends Thread implements Runnable, BestMessages {
     private Map<Integer, GenericTree<FileData>> map_threads_of_discussion;
     private List<Message> messageList;
     private Timer timer = new Timer();
+
+    public RunImpl(){
+        start();
+    }
 
     public void computeValueOfImportance(GenericTreeNode<FileData> root){
         if(((Message) root.getData()).isActive()){
@@ -23,7 +27,7 @@ public class RunImpl implements Runnable {
         }
     }
 
-    private void scheduleScoreDecrease(GenericTreeNode<FileData> node, GenericTree<FileData> tree, int time){
+    private void scheduleScoreDecrease(GenericTreeNode<FileData> node, GenericTree<FileData> tree){
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
@@ -31,7 +35,7 @@ public class RunImpl implements Runnable {
                 // On n'oublie pas de recalculer la VOI du thread
                 computeValueOfImportance(tree.getRoot());
             }
-        }, time, time);
+        }, 30000, 30000);
     }
 
     private void doAllTheWork(String strData){
@@ -54,7 +58,7 @@ public class RunImpl implements Runnable {
 
             // On programme la diminution du score du message de 1 toutes les 30 secondes
             // Et on met à jour la Value of Importance du thread
-            scheduleScoreDecrease(node, thread_of_discussion, 30000);
+            scheduleScoreDecrease(node, thread_of_discussion);
 
             // On ajoute ensuite ce TdD à la map de tous les TdD
             map_threads_of_discussion.put(data.getId(), thread_of_discussion);
@@ -78,7 +82,7 @@ public class RunImpl implements Runnable {
 
                 // On programme la diminution du score du commentaire de 1 toutes les 30 secondes
                 // Et on met à jour la Value of Importance du thread
-                scheduleScoreDecrease(node, thread_of_discussion, 30000);
+                scheduleScoreDecrease(node, thread_of_discussion);
 
                 // On calcule le nouveau score du message racine
                 computeValueOfImportance(thread_of_discussion.getRoot());
@@ -96,21 +100,12 @@ public class RunImpl implements Runnable {
 
                 // On programme la diminution du score du commentaire de 1 toutes les 30 secondes
                 // Et on met à jour la Value of Importance du thread
-                scheduleScoreDecrease(node, thread_of_discussion, 30000);
+                scheduleScoreDecrease(node, thread_of_discussion);
 
                 // On calcule le nouveau score du message racine
                 computeValueOfImportance(thread_of_discussion.getRoot());
             }
         }
-
-
-
-        // DEBUG
-        System.out.println("-----------------");
-        System.out.println(getThreeBestMessagesToString());
-        /*for(Message m : getThreeBestMessages()){
-            m.printMsg();
-        }*/
     }
 
     public GenericTree<FileData> findThread(int idComment){
@@ -137,10 +132,10 @@ public class RunImpl implements Runnable {
         }
     }
 
-    public String getThreeBestMessagesToString(){
+    public String getThreeBestMessagesToString() throws RemoteException{
         StringBuilder result = new StringBuilder();
         for(Message m : getThreeBestMessages()){
-            result.append(m.getId() + "|" + m.getIdUser() + "|");
+            result.append(m.getId()).append("|").append(m.getIdUser()).append("|");
         }
         return String.valueOf(result);
     }
