@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.net.Socket;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
@@ -106,9 +107,10 @@ public class RunImpl implements Runnable {
 
         // DEBUG
         System.out.println("-----------------");
-        for(Message m : getThreeBestMessages()){
+        System.out.println(getThreeBestMessagesToString());
+        /*for(Message m : getThreeBestMessages()){
             m.printMsg();
-        }
+        }*/
     }
 
     public GenericTree<FileData> findThread(int idComment){
@@ -133,6 +135,14 @@ public class RunImpl implements Runnable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public String getThreeBestMessagesToString(){
+        StringBuilder result = new StringBuilder();
+        for(Message m : getThreeBestMessages()){
+            result.append(m.getId() + "|" + m.getIdUser() + "|");
+        }
+        return String.valueOf(result);
     }
 
     public List<Message> getThreeBestMessages(){
