@@ -47,6 +47,7 @@ public class AppClient extends JFrame {
             setPreferredSize(new Dimension(640, 480));
             setLayout(new GridLayout(2, 1));
             JTextArea taTxt = new JTextArea(Client.start(startMode),2,40);
+            taTxt.setEditable(false);
 
             intro.add(title);
             intro.add(displayType);
@@ -58,6 +59,7 @@ public class AppClient extends JFrame {
             setPreferredSize(new Dimension(640, 480));
             setLayout(new GridLayout(2, 1));
             JTextArea taXML = new JTextArea(Client.start(startMode), 10,40);
+            taXML.setEditable(false);
             JScrollPane spXML = new JScrollPane(taXML);
 
 
