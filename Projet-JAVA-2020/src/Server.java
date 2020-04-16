@@ -1,58 +1,51 @@
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.ServerSocket;
-import java.net.Socket;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/**
+ *  Classe permettant de gérer le serveur.
+ *
+ *  Le serveur calcule les trois meilleurs messages d'un réseau social sur une machine virtuelle et peut
+ *  les envoyer à un client (on utilise RMI).
+ *
+ * @author Nady Saddik
+ * @author Alexandre Karakas
+ * @version 2.0
+ * @since Février 2020
+ */
 public class Server {
     private static ServerSocket serverSocket;
     private static ExecutorService pool;
 
-    public static void main(String[] args) throws IOException {
-        // Version avec serveur RMI
+    /**
+     *  Méthode permettant de démarrer le serveur et de permettre l'envoi des trois meilleurs messages avec RMI.
+     *
+     * @return Vrai si le démarrage s'est passé sans encombre, faux sinon.
+     */
+    public static boolean start() {
         try{
-            System.out.println("Le serveur est démarré.");
             BestMessages imp = (BestMessages) UnicastRemoteObject.exportObject(new RunImpl(), 33333);
             Registry registry = LocateRegistry.createRegistry(33333);
             registry.rebind("BestMessages", imp);
+            return true;
         } catch (Exception e){
             e.printStackTrace();
+            return false;
         }
-
-
-        // Version avec socket pour la question 2 (décommenter et commenter le try catch du dessus)
-        /*
-        // On instancie le serveur, port 33333 et un pool de threads de taille 5 puis on le démarre
-        Server server = new Server(33333, 5);
-                // On crée puis démarre le thread principal qui calcule les 3 meilleurs messages continuellement
-        RunImpl imp = new RunImpl();
-        Thread mainThread = new Thread(imp);
-        mainThread.start();
-
-        System.out.println("Le serveur est démarré");
-
-        // On fait une boucle infinie pour détecter à chaque instant une connexion provenant d'un client
-        while(true){
-            Socket connectionSocket = serverSocket.accept();
-            pool.execute(() -> {
-                try {
-                    PrintWriter writer = new PrintWriter(connectionSocket.getOutputStream());
-                    String toSend = imp.getThreeBestMessagesToString();
-                    writer.write(toSend);
-                    writer.flush();
-                    writer.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            });
-        }
-        */
     }
 
+    /**
+     *  Permet d'instancier un serveur avec le port voulu et une taille de pool de threads voulus
+     *  (plus utilisée depuis l'implémentation de RMI).
+     *
+     * @param port Port
+     * @param poolSize Taille du pool de threads
+     * @throws IOException Si le ServeurSocket n'a pas pu être créé
+     */
     public Server(int port, int poolSize) throws IOException {
         serverSocket = new ServerSocket(port);
         // On crée un pool de threads de taille poolSize

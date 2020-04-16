@@ -144,46 +144,6 @@ public class GenericTree<E> {
         traversalResult.add(node);
     }
 
-    public Map<GenericTreeNode<E>, Integer> buildWithDepth(GenericTreeTraversalOrderEnum traversalOrder) {
-        Map<GenericTreeNode<E>, Integer> returnMap = null;
-
-        if(root != null) {
-            returnMap = buildWithDepth(root, traversalOrder);
-        }
-
-        return returnMap;
-    }
-
-    public Map<GenericTreeNode<E>, Integer> buildWithDepth(GenericTreeNode<E> node, GenericTreeTraversalOrderEnum traversalOrder) {
-        Map<GenericTreeNode<E>, Integer> traversalResult = new LinkedHashMap<>();
-
-        if(traversalOrder == GenericTreeTraversalOrderEnum.PRE_ORDER) {
-            buildPreOrderWithDepth(node, traversalResult, 0);
-        }
-
-        else if(traversalOrder == GenericTreeTraversalOrderEnum.POST_ORDER) {
-            buildPostOrderWithDepth(node, traversalResult, 0);
-        }
-
-        return traversalResult;
-    }
-
-    private void buildPreOrderWithDepth(GenericTreeNode<E> node, Map<GenericTreeNode<E>, Integer> traversalResult, int depth) {
-        traversalResult.put(node, depth);
-
-        for(GenericTreeNode<E> child : node.getChildren()) {
-            buildPreOrderWithDepth(child, traversalResult, depth + 1);
-        }
-    }
-
-    private void buildPostOrderWithDepth(GenericTreeNode<E> node, Map<GenericTreeNode<E>, Integer> traversalResult, int depth) {
-        for(GenericTreeNode<E> child : node.getChildren()) {
-            buildPostOrderWithDepth(child, traversalResult, depth + 1);
-        }
-
-        traversalResult.put(node, depth);
-    }
-
     public String toString() {
         /*
         We're going to assume a pre-order traversal by default
@@ -194,20 +154,6 @@ public class GenericTree<E> {
         if(root != null) {
             stringRepresentation = build(GenericTreeTraversalOrderEnum.PRE_ORDER).toString();
 
-        }
-
-        return stringRepresentation;
-    }
-
-    public String toStringWithDepth() {
-        /*
-        We're going to assume a pre-order traversal by default
-         */
-
-        String stringRepresentation = "";
-
-        if(root != null) {
-            stringRepresentation = buildWithDepth(GenericTreeTraversalOrderEnum.PRE_ORDER).toString();
         }
 
         return stringRepresentation;

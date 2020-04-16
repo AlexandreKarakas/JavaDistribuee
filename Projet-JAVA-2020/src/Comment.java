@@ -1,24 +1,39 @@
 import java.util.Date;
 
+/**
+ *  Un commentaire est un objet représentant les patterns suivants :
+ *  -   idCommentaire|idUser|commentaire|user|pidCommentaire|
+ *  -   idCommentaire|idUser|commentaire|user||pidMessage
+ *
+ *  Il s'agit donc soit d'une réponse à un message, soit à un autre commentaire. Le score de départ d'un commentaire
+ *  vaut 20 et décroit avec le temps.
+ *
+ * @author Nady Saddik
+ * @author Alexandre Karakas
+ * @version 2.0
+ * @since Février 2020
+ */
 public class Comment implements FileData {
     private Date date;
 
-    private int idComment,
-                idUser,
-                pidComment,
-                pidMessage,
-                score;
+    private int score;
 
-    private String  comment,
-                    user;
+    private final int   idComment,
+                        idUser,
+                        pidComment,
+                        pidMessage;
 
-    private boolean is_a_comment_to_another_comment;
+    private final String    comment,
+                            user;
+
+    private final boolean is_a_comment_to_another_comment;
 
     /**
-     * Crée un objet "Comment" : il s'agit d'un commentaire répondant soit à un autre commentaire,
-     * soit à un message
+     *  Crée un objet "Comment" : il s'agit d'un commentaire répondant soit à un autre commentaire,
+     *  soit à un message.
+     *
      * @param idComment Id du commentaire
-     * @param idUser Id de l'utilisateur
+     * @param idUser Id de l'utilisateur qui a écrit le commentaire
      * @param comment Contenu du commentaire
      * @param user Nom de l'utilisateur qui a écrit le commentaire
      * @param pidParent Id du message/commentaire auquel il répond
@@ -39,46 +54,81 @@ public class Comment implements FileData {
         score = 20;
     }
 
+    /**
+     *  Méthode permettant de décroître le score de 1pt s'il n'a pas encore atteint 0pt.
+     */
     public void decreaseScoreByOne() {
         if(score > 0)
             score--;
     }
 
     /**
-     * Renvoie l'id du commentaire
-     * @return int correspondant à l'identifiant du message
-     */
-    public int getId(){
-        return idComment;
-    }
-
-    /**
-     * Renvoie le pid du message
-     * @return int correspondant au pid du message
-     */
-    public int getPidMessage() {
-        return pidMessage;
-    }
-
-    /**
-     * Renvoie le pid du commentaire
-     * @return int correspondant au pid du commentaire
-     */
-    public int getPidComment() {
-        return pidComment;
-    }
-
-    /**
-     * Renvoie le score du commentaire
-     * @return int correspondant au score du commentaire
+     *  Renvoie le score du commentaire
+     *
+     * @return Score du commentaire
      */
     public int getScore() {
         return score;
     }
 
     /**
-     * Renvoie vrai si le commentaire répond à un autre commentaire
-     * @return boolean vrai si oui, faux sinon
+     *  Renvoie l'id du commentaire
+     *
+     * @return Identifiant du commentaire
+     */
+    public int getId(){
+        return idComment;
+    }
+
+    /**
+     *  Renvoie l'id de l'utilisateur
+     *
+     * @return Id de l'utilisateur
+     */
+    public int getIdUser() {
+        return idUser;
+    }
+
+    /**
+     *  Renvoie le pid du message
+     *
+     * @return Pid du message
+     */
+    public int getPidMessage() {
+        return pidMessage;
+    }
+
+    /**
+     *  Renvoie le pid du commentaire
+     *
+     * @return Pid du commentaire
+     */
+    public int getPidComment() {
+        return pidComment;
+    }
+
+    /**
+     *  Renvoie le commentaire
+     *
+     * @return Commentaire
+     */
+    public String getComment() {
+        return comment;
+    }
+
+    /**
+     *  Renvoie le nom de l'utilisateur
+     *
+     * @return Nom de l'utilisateur
+     */
+    public String getUser() {
+        return user;
+    }
+
+    /**
+     *  Renvoie vrai si le commentaire répond à un autre commentaire
+     *
+     * @return vrai si oui, faux sinon
      */
     public boolean is_a_comment_to_another_comment() {
         return is_a_comment_to_another_comment;
